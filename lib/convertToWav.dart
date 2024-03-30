@@ -48,6 +48,6 @@ class ConvertToWav {
 
   void dispose() {
     streamController.close();
-    timer!.cancel();
+    timer?.cancel();
   }
 }
