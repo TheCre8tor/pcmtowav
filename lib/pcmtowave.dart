@@ -1,10 +1,8 @@
-
 import 'dart:typed_data';
 
-
- class Pcmtowave {
-
- static Uint8List pcmToWav(Uint8List pcmData, int sampleRate, int numChannels) {
+class PcmToWave {
+  static Uint8List pcmToWav(
+      Uint8List pcmData, int sampleRate, int numChannels) {
     int bytesPerSample = 2; // Assuming 16-bit PCM
     int numSamples = pcmData.length ~/ bytesPerSample;
 
@@ -83,5 +81,4 @@ import 'dart:typed_data';
 
     return Uint8List.fromList(wavData);
   }
-
 }

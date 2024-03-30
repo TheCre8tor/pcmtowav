@@ -1,13 +1,12 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pcmtowave/pcmtowave.dart';
-import 'package:pcmtowave/pcmtowave_platform_interface.dart';
 import 'package:pcmtowave/pcmtowave_method_channel.dart';
+import 'package:pcmtowave/pcmtowave_platform_interface.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
 class MockPcmtowavePlatform
     with MockPlatformInterfaceMixin
     implements PcmtowavePlatform {
-
   @override
   Future<String?> getPlatformVersion() => Future.value('42');
 }
@@ -20,7 +19,7 @@ void main() {
   });
 
   test('getPlatformVersion', () async {
-    Pcmtowave pcmtowavePlugin = Pcmtowave();
+    PcmToWave pcmtowavePlugin = PcmToWave();
     MockPcmtowavePlatform fakePlatform = MockPcmtowavePlatform();
     PcmtowavePlatform.instance = fakePlatform;
 

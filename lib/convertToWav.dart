@@ -2,68 +2,52 @@ import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:pcmtowave/pcmtowave.dart';
+import 'package:rxdart/rxdart.dart';
 
-class convertToWav{
+class ConvertToWav {
+  int sampleRate;
 
-   int sampleRate ;
-   int numChannels ;
+  int numChannels;
 
-   int converMiliSeconds;
+  int converMiliSeconds;
 
+  List<int>? bytesSink = [];
 
-   List<int> ? bytesSink =[];
+  Timer? timer;
 
-   Timer ? timer;
+  StreamController<Uint8List> streamController = BehaviorSubject();
 
-   StreamController<Uint8List> streamController=StreamController();
+  ConvertToWav({
+    this.sampleRate = 44100,
+    this.numChannels = 2,
+    this.converMiliSeconds = 1000,
+  });
 
+  void Function(Timer timer) get callBack => (timer) {
+        final res = PcmToWave.pcmToWav(
+          Uint8List.fromList(bytesSink!),
+          sampleRate,
+          numChannels,
+        );
 
-   convertToWav({ this.sampleRate=44100, this.numChannels=2,this.converMiliSeconds=1000});
+        streamController.add(res);
 
-  void Function(Timer timer) get callBack => (timer){
+        bytesSink = [];
+      };
 
+  void run(Uint8List? pcmData) {
+    bytesSink!.addAll(pcmData!.toList());
 
-
-      final res =   Pcmtowave.pcmToWav( Uint8List.fromList(bytesSink!),sampleRate,numChannels);
-      streamController.add(res);
-
-      bytesSink=[];
-
-
-
-  };
-
-
-   void run(   Uint8List ? pcmData ){
-
-     bytesSink!.addAll(pcmData!.toList());
-
-
-if(timer==null){
-
-  timer=  Timer.periodic( Duration(milliseconds: converMiliSeconds),callBack);
-
-}
-
-
-
-
-
-   }
-
-
-
-  Stream<Uint8List>  get convert =>streamController.stream;
-
-
-
-  void dispose()  {
-
-   streamController.close();
-   timer!.cancel();
-
+    timer ??= Timer.periodic(
+      Duration(milliseconds: converMiliSeconds),
+      callBack,
+    );
   }
 
+  Stream<Uint8List> get convert => streamController.stream;
 
-
+  void dispose() {
+    streamController.close();
+    timer!.cancel();
+  }
 }

@@ -27,7 +27,7 @@ class _MyAppState extends State<MyApp> {
   String _platformVersion = 'Unknown';
 
   //init
-  final _pcmtowave = convertToWav(
+  final _pcmtowave = ConvertToWav(
     sampleRate: 44100,
     converMiliSeconds: 1000,
     numChannels: 2
